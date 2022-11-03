@@ -2202,7 +2202,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hotwired_stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hotwired/stimulus */ "./node_modules/@hotwired/stimulus/dist/stimulus.js");
 /* harmony import */ var _hotwired_stimulus_webpack_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @hotwired/stimulus-webpack-helpers */ "./node_modules/@hotwired/stimulus-webpack-helpers/dist/stimulus-webpack-helpers.js");
 // DON'T CHANGE THIS LINE
-window.myBadAssGarage = "joshy-woshi-big-bad-garage";
+window.myBadAssGarage = "the-happy-tires";
 if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssGarage.replace(/-/g, " ");
 // //////////////////////
 
@@ -2281,26 +2281,23 @@ var myBadAssGarage = window.myBadAssGarage;
 // Pseudo-code
 // //////////////////////
 
-// - Display the cars
+// - Initalize Stimulus
 // //////////////////
-// create a controller  in the first div of the body
 // Tips: use 'sch' shortcut to build the controller
-// target the cars-list
-// in the connector , fetch the cars data from the API
-// check API, retrive data
-// display 
+// sch
+// add the data controller to html page
 
 // - Add a car
 // //////////////////
-// target the form input
-// Action: Add a Car button clicked to get the target data: brand, plate, owner, etc.
-// check API document
-// post request to the API
-// call display method
+// target the #car-form
+// add an action (click on submit-button (disableDefault))
+// fetch (post) from the input values
+// dispay the cars (like above)
 
 // ///////////////////////
 // Code
-// //////////////////////
+// ///////////////////////
+
 
 var _default = /*#__PURE__*/function (_Controller) {
   _inherits(_default, _Controller);
@@ -2312,75 +2309,70 @@ var _default = /*#__PURE__*/function (_Controller) {
   _createClass(_default, [{
     key: "connect",
     value: function connect() {
+      // - Display the cars
+      // //////////////////
+      // get the url and api key(possibly)
+
+      // fetch data from the url in connect 
+      // set the targets from the cars-list 
+      // create cards
+      // insertAdjacentHTML (image, title, information etc) beforeend 
       console.log('Hello from garage_controller.js');
-      this.fetchCars();
-      // console.log(this.testTarget)
-    }
-  }, {
-    key: "fetchCars",
-    value: function fetchCars() {
-      var _this = this;
-      var url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
-      fetch(url).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        console.log(data);
-        _this.displayCars(data);
-      });
+      this.url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
+      this.displayCars();
     }
   }, {
     key: "displayCars",
-    value: function displayCars(cars) {
-      var _this2 = this;
-      this.listTarget.innerHTML = "";
-      cars.forEach(function (car) {
-        _this2.listTarget.insertAdjacentHTML("beforeend", "<div class=\"car\">\n      <div class=\"car-image\">\n        <img src=\"http://loremflickr.com/280/280/".concat(car.brand, " ").concat(car.model, "\" />\n      </div>\n      <div class=\"car-info\">\n        <h4>").concat(car.brand, " ").concat(car.model, "</h4>\n        <p><strong>Owner:</strong>").concat(car.owner, "</p>\n        <p><strong>Plate:</strong>").concat(car.plate, "</p>\n      </div>\n    </div>"));
+    value: function displayCars() {
+      var _this = this;
+      fetch(this.url).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        console.log(data);
+        // console.log(this.listTargets)
+        _this.listTarget.innerHTML = "";
+        data.forEach(function (car) {
+          var newCar = "<div class=\"car\">\n        <div class=\"car-image\">\n        <img src=\"http://loremflickr.com/280/280/".concat(car.brand, " ").concat(car.model, "\" />\n        </div>\n        <div class=\"car-info\">\n        <h4>").concat(car.brand, " ").concat(car.model, "</h4>\n        <p><strong>Owner:</strong> ").concat(car.owner, "</p>\n        <p><strong>Plate:</strong> ").concat(car.plate, "</p>\n        </div>\n        </div>");
+          _this.listTarget.insertAdjacentHTML("beforeend", newCar);
+        });
       });
+      // console.log(this.testTarget)
     }
+
+    // - Add a car
+    // //////////////////
+    // target the #car-form
+    // add an action (click on submit-button (disableDefault))
+    // fetch (post) from the input values
+    // dispay the cars (like above)
   }, {
     key: "addCar",
     value: function addCar(event) {
-      var _this3 = this;
+      var _this2 = this;
       event.preventDefault();
       console.log(event);
-      console.log(this.formTarget.elements["model"].value);
-      var formData = this.formTarget.elements;
-      var model = formData["model"].value;
-      var brand = formData["brand"].value;
-      var owner = formData["owner"].value;
-      var plate = formData["plate"].value;
-      var carData = {
-        "brand": brand,
-        "model": model,
-        "owner": owner,
-        "plate": plate
-      };
-      // can be written like this:
-      // const carData = {
-      //   brand,
-      //   model,
-      //   owner,
-      //   plate
-      // }
-      var options = {
+      fetch(this.url, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(carData)
-      };
-      var url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
-      fetch(url, options).then(function (response) {
+        body: JSON.stringify({
+          brand: this.brandTarget.value,
+          model: this.modelTarget.value,
+          owner: this.ownerTarget.value,
+          plate: this.plateTarget.value
+        })
+      }).then(function (response) {
         return response.json();
       }).then(function (data) {
         console.log(data);
-        _this3.fetchCars();
+        _this2.displayCars();
       });
     }
   }]);
   return _default;
 }(_hotwired_stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
-_defineProperty(_default, "targets", ['list', 'form']);
+_defineProperty(_default, "targets", ['list', 'brand', 'owner', 'plate', 'model']);
 
 
 /***/ })
