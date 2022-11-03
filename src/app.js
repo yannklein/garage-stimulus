@@ -1,5 +1,5 @@
 // DON'T CHANGE THIS LINE
-window.myBadAssGarage = "joshy-woshi-big-bad-garage";
+window.myBadAssGarage = "the-happy-tires";
 if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssGarage.replace(/-/g, " ");
 // //////////////////////
 
