@@ -36,12 +36,13 @@ export default class extends Controller {
   connect() {
     console.log("Hello from the controller!")
     // console.log(this.testTarget)
+    this.url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
+
     this.displayCars();
   }
 
   displayCars() {
-    const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
-    fetch(url)
+    fetch(this.url)
       .then(response => response.json())
       .then((data) => {
         console.log(data);
@@ -66,7 +67,6 @@ export default class extends Controller {
 
   addCar(event) {
     event.preventDefault()
-    const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
     const options = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -77,7 +77,7 @@ export default class extends Controller {
         model: this.modelTarget.value
       })
     }
-    fetch(url, options)
+    fetch(this.url, options)
       .then(response => response.json())
       .then((data) => {
         console.log(data)
