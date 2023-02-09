@@ -21,44 +21,56 @@
             Cheap, always on time, we are awesome.
           </div>
           <div class="text-center">
+
+
             <form class="car-form" id="new-car">
               <input
                 id="brand" 
                 type="text" 
-                data-garage-target="brand"
                 class="form-control" 
-                placeholder="Ferrari"/>
+                placeholder="Ferrari"
+                data-garage-target="brand"
+              />
               <input
                 id="model" 
                 type="text" 
-                data-garage-target="model"
                 class="form-control" 
-                placeholder="308 GTS"/>
+                placeholder="308 GTS"
+                data-garage-target="model"
+              />
               <input
                 id="plate" 
                 type="text" 
-                data-garage-target="plate"
                 class="form-control" 
-                placeholder="56E-478"/>
+                placeholder="56E-478"
+                data-garage-target="plate"
+
+              />
               <input
                 id="owner" 
                 type="text" 
-                data-garage-target="owner"
                 class="form-control" 
-                placeholder="Thomas Magnum"/>
+                placeholder="Thomas Magnum"
+                data-garage-target="owner"
+              />
               <input
                 type="submit" 
                 id="submit-btn" 
                 class="btn btn-cta" 
+                value="Add a Car"
                 data-action="click->garage#addCar"
-                value="Add a Car"/>
+              />
             </form>
+
+
           </div>
         </div>
       </div>
       
-      <div class="cars-list" data-garage-target="list">
+
+      <div class="cars-list" data-garage-target="cars">
         <!-- NOTE: The team designer left you this template for a car. Enjoy! -->
+        
         <div class="car">
           <div class="car-image">
             <img src="http://loremflickr.com/280/280/Ferrari 308" />
@@ -69,9 +81,11 @@
             <p><strong>Plate:</strong> 56E-478</p>
           </div>
         </div>
-      </div>
-    </div>
 
+      </div>
+
+
+    </div>
     <script src="dist/main.js"></script>
   </body>
 </html>

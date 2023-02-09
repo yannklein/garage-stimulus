@@ -7,23 +7,22 @@ const myBadAssGarage = window.myBadAssGarage;
 // Pseudo-code
 // //////////////////////
 
+// Remember CAT!
 
-// - Initalize Stimulus
-// //////////////////
-// Tips: use 'sch' shortcut to build the controller
-// sch
-// add the data controller to html page
+// ✅ 1.Add data-controller attribute to the right html Element.
 
+// Retrieve all the cars
 
+// 2.In the connect, fetch le wagon-garage.api and get our cars info
+// 3.Create the target for the cars list.
+// 4. Display the cars using the method insertAdjacentHTML.
 
+// Create cars
 
-// - Add a car
-// //////////////////
-// target the #car-form
-// add an action (click on submit-button (disableDefault))
-// fetch (post) from the input values
-// dispay the cars (like above)
-
+// Create an action for the AddCar button
+// Create 4 targets for each input
+// POST request to the wagon garage api
+// Retrieve all the cars
 
 // ///////////////////////
 // Code
@@ -32,74 +31,69 @@ const myBadAssGarage = window.myBadAssGarage;
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [ 'list', 'brand', 'owner', 'plate', 'model' ]
+  static targets = ['cars', 'brand', 'plate', 'owner', 'model']
 
   connect() {
-    // - Display the cars
-    // //////////////////
-    // get the url and api key(possibly)
-    
-    // fetch data from the url in connect 
-    // set the targets from the cars-list 
-    // create cards
-    // insertAdjacentHTML (image, title, information etc) beforeend 
-    console.log('Hello from garage_controller.js')
-    this.url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`
-    this.displayCars()
+    console.log("Hello from the controller!")
+    // console.log(this.testTarget)
+    this.displayCars();
   }
 
   displayCars() {
-    fetch(this.url)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // console.log(this.listTargets)
-      this.listTarget.innerHTML = ""
-      data.forEach((car) => {
-        const newCar =
-        `<div class="car">
-        <div class="car-image">
-        <img src="http://loremflickr.com/280/280/${car.brand} ${car.model}" />
-        </div>
-        <div class="car-info">
-        <h4>${car.brand} ${car.model}</h4>
-        <p><strong>Owner:</strong> ${car.owner}</p>
-        <p><strong>Plate:</strong> ${car.plate}</p>
-        </div>
-        </div>`;
-        this.listTarget.insertAdjacentHTML("beforeend", newCar); 
+    const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
+    fetch(url)
+      .then(response => response.json())
+      .then((data) => {
+        console.log(data);
+        console.log(this.carsTarget);
+        this.carsTarget.innerHTML = "";
+        data.forEach((car) => {
+          this.carsTarget.insertAdjacentHTML("beforeend",
+          `<div class="car">
+          <div class="car-image">
+            <img src="http://loremflickr.com/280/280/${car.brand} ${car.model}" />
+          </div>
+          <div class="car-info">
+            <h4>${car.brand} ${car.model}</h4>
+            <p><strong>Owner:</strong> ${car.owner}</p>
+            <p><strong>Plate:</strong> ${car.plate}</p>
+          </div>
+        </div>`
+          );
+        });
       })
-    })
-    // console.log(this.testTarget)
   }
-
-  // - Add a car
-  // //////////////////
-  // target the #car-form
-  // add an action (click on submit-button (disableDefault))
-  // fetch (post) from the input values
-  // dispay the cars (like above)
 
   addCar(event) {
     event.preventDefault()
-    console.log(event)
-    fetch(this.url, {
+    const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
+    const options = {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         brand: this.brandTarget.value,
-        model: this.modelTarget.value,
         owner: this.ownerTarget.value,
-        plate: this.plateTarget.value
+        plate: this.plateTarget.value,
+        model: this.modelTarget.value
       })
-    })
-      .then( response => response.json())
+    }
+    fetch(url, options)
+      .then(response => response.json())
       .then((data) => {
         console.log(data)
         this.displayCars()
-      })
+      });
   }
+
+  // verb: POST
+  // url: https://wagon-garage-api.herokuapp.com/:garage/cars
+  // headers: Content-Type: application/json
+  // body:
+  //   {
+  //     "brand": "PEUGEOT",
+  //     "model": "106",
+  //     "owner": "ssaunier",
+  //     "plate": "123AZ56"
+  //   }
 
 }
