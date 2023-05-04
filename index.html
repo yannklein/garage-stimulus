@@ -24,41 +24,36 @@
 
 
             <form class="car-form" id="new-car">
-              <input
+              <input data-garage-target="brand"
                 id="brand" 
                 type="text" 
                 class="form-control" 
                 placeholder="Ferrari"
-                data-garage-target="brand"
               />
-              <input
+              <input data-garage-target="model"
                 id="model" 
                 type="text" 
                 class="form-control" 
                 placeholder="308 GTS"
-                data-garage-target="model"
               />
-              <input
+              <input data-garage-target="plate"
                 id="plate" 
                 type="text" 
                 class="form-control" 
                 placeholder="56E-478"
-                data-garage-target="plate"
 
               />
-              <input
+              <input data-garage-target="owner"
                 id="owner" 
                 type="text" 
                 class="form-control" 
                 placeholder="Thomas Magnum"
-                data-garage-target="owner"
               />
-              <input
+              <input data-action="click->garage#create"
                 type="submit" 
                 id="submit-btn" 
                 class="btn btn-cta" 
                 value="Add a Car"
-                data-action="click->garage#addCar"
               />
             </form>
 
@@ -68,12 +63,12 @@
       </div>
       
 
-      <div class="cars-list" data-garage-target="cars">
+      <div class="cars-list" data-garage-target = "carsList">
         <!-- NOTE: The team designer left you this template for a car. Enjoy! -->
         
         <div class="car">
           <div class="car-image">
-            <img src="http://loremflickr.com/280/280/Ferrari 308" />
+            <img src="http://loremflickr.com/280/280/Ferrari,308" />
           </div>
           <div class="car-info">
             <h4>Ferrari 308</h4>
