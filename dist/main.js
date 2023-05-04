@@ -2581,7 +2581,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hotwired_stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hotwired/stimulus */ "./node_modules/@hotwired/stimulus/dist/stimulus.js");
 /* harmony import */ var _hotwired_stimulus_webpack_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @hotwired/stimulus-webpack-helpers */ "./node_modules/@hotwired/stimulus-webpack-helpers/dist/stimulus-webpack-helpers.js");
 // DON'T CHANGE THIS LINE
-window.myBadAssGarage = "j-flex-garage";
+window.myBadAssGarage = "yann-borghini";
 if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssGarage.replace(/-/g, " ");
 // //////////////////////
 
@@ -2661,28 +2661,30 @@ var myBadAssGarage = window.myBadAssGarage;
 // //////////////////////
 // Pseudo-code
 // //////////////////////
-
 // Remember CAT!
 
-// ✅ 1.Add data-controller attribute to the right html Element.
+// 1. Add data-controller attribute to the right html Element.
 
 // Retrieve all the cars
 
-// 2.In the connect, fetch le wagon-garage.api and get our cars info
-// 3.Create the target for the cars list.
-// 4. Display the cars using the method insertAdjacentHTML.
+// 2. no action, write the code in the connect method.
+// 3. fetch api
+// 4. target cars-list
+// 5. add the car to the cars
 
-// Create cars
+// Create car
 
-// Create an action for the AddCar button
-// Create 4 targets for each input
-// POST request to the wagon garage api
-// Retrieve all the cars
+// 1. action for add car button "click"
+// 2. target the four input fields get values
+// 3. build an object owner, car, brand, and plate
+// 4. make a post request with object json format
+// 5. retrieve all cars and display
 
 // ///////////////////////
 // Code
 // ///////////////////////
 
+// Tips: use 'sch' shortcut to build the stimulus controller
 
 var _default = /*#__PURE__*/function (_Controller) {
   _inherits(_default, _Controller);
@@ -2694,66 +2696,53 @@ var _default = /*#__PURE__*/function (_Controller) {
   _createClass(_default, [{
     key: "connect",
     value: function connect() {
-      console.log("Hello from the controller!");
-      // console.log(this.testTarget)
-      this.displayCars();
+      this.url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
+      this.getCars();
     }
   }, {
-    key: "displayCars",
-    value: function displayCars() {
+    key: "getCars",
+    value: function getCars() {
       var _this = this;
-      var url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
-      fetch(url).then(function (response) {
+      fetch(this.url).then(function (response) {
         return response.json();
       }).then(function (data) {
         console.log(data);
-        console.log(_this.carsTarget);
-        _this.carsTarget.innerHTML = "";
+        _this.carsListTarget.innerHTML = "";
         data.forEach(function (car) {
-          _this.carsTarget.insertAdjacentHTML("beforeend", "<div class=\"car\">\n          <div class=\"car-image\">\n            <img src=\"http://loremflickr.com/280/280/".concat(car.brand, " ").concat(car.model, "\" />\n          </div>\n          <div class=\"car-info\">\n            <h4>").concat(car.brand, " ").concat(car.model, "</h4>\n            <p><strong>Owner:</strong> ").concat(car.owner, "</p>\n            <p><strong>Plate:</strong> ").concat(car.plate, "</p>\n          </div>\n        </div>"));
+          _this.carsListTarget.insertAdjacentHTML("afterbegin", "<div class=\"car\">\n            <div class=\"car-image\">\n              <img src=\"http://loremflickr.com/280/280/".concat(car.brand, ",").concat(car.model, "\" />\n            </div>\n            <div class=\"car-info\">\n              <h4>").concat(car.brand, " ").concat(car.model, "</h4>\n              <p><strong>Owner:</strong> ").concat(car.owner, "</p>\n              <p><strong>Plate:</strong> ").concat(car.plate, "</p>\n            </div>\n          </div>"));
         });
       });
     }
   }, {
-    key: "addCar",
-    value: function addCar(event) {
+    key: "create",
+    value: function create(event) {
       var _this2 = this;
       event.preventDefault();
-      var url = "https://wagon-garage-api.herokuapp.com/".concat(myBadAssGarage, "/cars");
+      console.log("any string");
+      var newcar = {
+        brand: this.brandTarget.value,
+        model: this.modelTarget.value,
+        plate: this.plateTarget.value,
+        owner: this.ownerTarget.value
+      };
       var options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          brand: this.brandTarget.value,
-          owner: this.ownerTarget.value,
-          plate: this.plateTarget.value,
-          model: this.modelTarget.value
-        })
+        body: JSON.stringify(newcar)
       };
-      fetch(url, options).then(function (response) {
+      fetch(this.url, options).then(function (response) {
         return response.json();
       }).then(function (data) {
         console.log(data);
-        _this2.displayCars();
+        _this2.getCars();
       });
     }
-
-    // verb: POST
-    // url: https://wagon-garage-api.herokuapp.com/:garage/cars
-    // headers: Content-Type: application/json
-    // body:
-    //   {
-    //     "brand": "PEUGEOT",
-    //     "model": "106",
-    //     "owner": "ssaunier",
-    //     "plate": "123AZ56"
-    //   }
   }]);
   return _default;
 }(_hotwired_stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
-_defineProperty(_default, "targets", ['cars', 'brand', 'plate', 'owner', 'model']);
+_defineProperty(_default, "targets", ['carsList', 'brand', 'model', 'plate', 'owner']);
 
 
 /***/ })
