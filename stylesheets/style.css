@@ -83,7 +83,9 @@ h3 {
   width: 140px;
 }
 .car-image img {
+  height: 100%;
   width: 100%;
+  object-fit: cover;
 }
 .car-info {
   padding: 10px;
