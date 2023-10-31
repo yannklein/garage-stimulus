@@ -1,10 +1,6 @@
 // DON'T CHANGE THIS LINE
-window.myBadAssGarage = "le-swagon";
+window.myBadAssGarage = "yannz-garage";
 if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssGarage.replace(/-/g, " ");
-
-
-
-// //////////////////////
 
 // //////////////////////
 // PSEUDOCODE
@@ -12,75 +8,84 @@ if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssG
 
 // Get all the cars
 // //////////////////////
-const url = "https://wagon-garage-api.herokuapp.com/le-swagon/cars";
 
-const displayCars = () => {
-  //1.select the element containing the cars list class
-  const carList = document.querySelector(".cars-list")
-  //2. fetch the api using GET request
-  fetch(url).then(response => response.json())
-  .then((data) => {
-    console.log(data);
-    carList.innerHTML = "";
-    data.forEach((car)=> {
-      carList.insertAdjacentHTML("beforeend",
-      `<div class="car">
-              <div class="car-image">
-                <img src="http://loremflickr.com/280/280/${car.brand},${car.model}"/>
-              </div>
-              <div class="car-info">
-                <h4>${car.brand} ${car.model}</h4>
-                <p><strong>Owner:</strong> ${car.owner}</p>
-                <p><strong>Plate:</strong> ${car.plate}</p>
-              </div>
-            </div>`
-      )
-    })
-  })
-};
+// select the elements i want to change - cars-list - adding to it
+// addEventListener - no need since we are loading at each refresh
+// fetch - GET
+// go to documentation to get the URL to be used in the fetch
+// change the DOM: insert the car data into the .cars-list
+// guess is: insertAdjacentHTML
 
-displayCars();
-//3. iterate using .forEach to display
-//4.change the Dom to display.insertHTML 
-//5. put this in a function 
+const carsList = document.querySelector(".cars-list");
 
+const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;  
 
+const getCars = () => {
+  fetch(url)
+    .then(response => response.json())
+    .then((data) => {
+      const cars = data;
+
+      carsList.innerHTML = "";
+      // carsList.replaceChildren(); does the same!
+
+      cars.forEach((car) => {
+        const brand = car.brand;
+        const model = car.model;
+        const owner = car.owner;
+        const plate = car.plate;
+
+        carsList.insertAdjacentHTML("beforeend", `<div class="car">
+        <div class="car-image">
+          <img src="http://loremflickr.com/280/280/${brand},${model}" />
+        </div>
+        <div class="car-info">
+          <h4>${brand} ${model}</h4>
+          <p><strong>Owner:</strong> ${owner}</p>
+          <p><strong>Plate:</strong> ${plate}</p>
+        </div>
+      </div>`);
+      });
+    });
+}
+getCars();
 
 // Add a new car
-//1. select the 4 inputs and the button
-const brandInput = document.querySelector("#brand");
-const modelInput = document.querySelector("#model");
-const plateInput = document.querySelector("#plate");
-const ownerInput = document.querySelector("#owner");
-const submitBtn = document.querySelector("#submit-btn");
-//2. add event listener click on Button or submit dealers choice ;)
+// //////////////////////
+
 
 const addCar = (event) => {
-  console.log(event);
+  // Select form (Brand, model, plate, owner and button)
+  const brandInput = document.querySelector("#brand");
+  const modelInput = document.querySelector("#model");
+  const plateInput = document.querySelector("#plate");
+  const ownerInput = document.querySelector("#owner");
+  const submitInput = document.querySelector("#submit-btn");
+  
   event.preventDefault();
-  //3. Post request to add a new car
-  const carData = {
+  console.log(event);
+  // Post car in the API
+  const newCar = {
     brand: brandInput.value,
     model: modelInput.value,
     owner: ownerInput.value,
     plate: plateInput.value
-  };
+  }
 
   const options = {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(carData)
-  };
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newCar)
+  }
 
   fetch(url, options)
     .then(response => response.json())
     .then((data) => {
       console.log(data);
-      displayCars();
+      // Call the function getCars
+      getCars();
     })
-  //4. call display function after data 
 };
 
-submitBtn.addEventListener("click", addCar);
-
-// //////////////////////
+// Listen to "click" on the button
+submitInput.addEventListener("click", addCar)
