@@ -1,5 +1,5 @@
 // DON'T CHANGE THIS LINE
-window.myBadAssGarage = "yannz-garage";
+window.myBadAssGarage = "dwayne-wayne";
 if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssGarage.replace(/-/g, " ");
 
 // //////////////////////
@@ -8,84 +8,78 @@ if (myBadAssGarage) document.querySelector("#garage-name").innerText = myBadAssG
 
 // Get all the cars
 // //////////////////////
+// Steps
+// 1. Get all the necessary HTML elements -> cars-list, 
+// 2.5 Fetch an API -> Get the data about cars. 
+// 3 Change the DOM -> Inserting cars cards into the cars-list. 
 
-// select the elements i want to change - cars-list - adding to it
-// addEventListener - no need since we are loading at each refresh
-// fetch - GET
-// go to documentation to get the URL to be used in the fetch
-// change the DOM: insert the car data into the .cars-list
-// guess is: insertAdjacentHTML
-
-const carsList = document.querySelector(".cars-list");
-
-const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;  
+const displayCars = (carsInfo) => {
+  const carsList = document.querySelector(".cars-list");
+  carsList.innerHTML = '';
+  carsInfo.forEach((carInfo) => {
+    carsList.insertAdjacentHTML(
+      'beforeend', 
+      `<div class="car">
+        <div class="car-image">
+          <img src="http://loremflickr.com/280/280/${carInfo.brand},${carInfo.model}" />
+        </div>
+        <div class="car-info">
+          <h4>${carInfo.brand} ${carInfo.model}</h4>
+          <p><strong>Owner:</strong> ${carInfo.owner}</p>
+          <p><strong>Plate:</strong> ${carInfo.plate}</p>
+        </div>
+      </div>`
+    );
+  });
+};
 
 const getCars = () => {
+  const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
   fetch(url)
     .then(response => response.json())
     .then((data) => {
-      const cars = data;
-
-      carsList.innerHTML = "";
-      // carsList.replaceChildren(); does the same!
-
-      cars.forEach((car) => {
-        const brand = car.brand;
-        const model = car.model;
-        const owner = car.owner;
-        const plate = car.plate;
-
-        carsList.insertAdjacentHTML("beforeend", `<div class="car">
-        <div class="car-image">
-          <img src="http://loremflickr.com/280/280/${brand},${model}" />
-        </div>
-        <div class="car-info">
-          <h4>${brand} ${model}</h4>
-          <p><strong>Owner:</strong> ${owner}</p>
-          <p><strong>Plate:</strong> ${plate}</p>
-        </div>
-      </div>`);
-      });
-    });
+      displayCars(data);
+  });
 }
+
 getCars();
 
 // Add a new car
 // //////////////////////
+// 1. Get all the necessary HTML elements -> new-car and input: brand, model, plate, owner
+const newCarForm = document.querySelector("#new-car");
+const brandEl = document.querySelector("#brand");
+const modelEl = document.querySelector("#model");
+const ownerEl = document.querySelector("#owner");
+const plateEl = document.querySelector("#plate");
 
-
-const addCar = (event) => {
-  // Select form (Brand, model, plate, owner and button)
-  const brandInput = document.querySelector("#brand");
-  const modelInput = document.querySelector("#model");
-  const plateInput = document.querySelector("#plate");
-  const ownerInput = document.querySelector("#owner");
-  const submitInput = document.querySelector("#submit-btn");
-  
-  event.preventDefault();
+// 2. Get the event listener -> submit on new-car
+newCarForm.addEventListener("submit", (event) => {
   console.log(event);
-  // Post car in the API
-  const newCar = {
-    brand: brandInput.value,
-    model: modelInput.value,
-    owner: ownerInput.value,
-    plate: plateInput.value
-  }
+  event.preventDefault();
+  // 3. API (POST) the input (using .value)
+  const url = `https://wagon-garage-api.herokuapp.com/${myBadAssGarage}/cars`;
 
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newCar)
+    body: JSON.stringify({
+      brand: brandEl.value,
+      model: modelEl.value,
+      owner: ownerEl.value,
+      plate: plateEl.value
+    })
   }
 
   fetch(url, options)
     .then(response => response.json())
     .then((data) => {
       console.log(data);
-      // Call the function getCars
-      getCars();
+      // 4. Get all the cars (once again)
     })
-};
+  getCars();
+  console.log("hi")
+});
 
-// Listen to "click" on the button
-submitInput.addEventListener("click", addCar)
+
+
